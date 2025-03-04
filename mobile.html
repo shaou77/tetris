@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>俄罗斯方块 - 手机版</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+            touch-action: manipulation;
+            overflow: hidden;
+        }
+        .game-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px;
+            gap: 10px;
+        }
+        .game-board {
+            border: 2px solid #333;
+            background-color: #fff;
+            margin-bottom: 10px;
+        }
+        .info-panel {
+            display: flex;
+            flex-direction: column;
+            width: 120px;
+            gap: 10px;
+        }
+        .next-piece {
+            border: 2px solid #333;
+            background-color: #fff;
+            padding: 5px;
+            text-align: center;
+            width: 100%;
+        }
+        .score-board {
+            border: 2px solid #333;
+            background-color: #fff;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 2px 0;
+        }
+        .controls {
+            text-align: center;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .game-buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 8px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            touch-action: manipulation;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        h1 {
+            color: #333;
+            margin: 10px 0;
+            font-size: 24px;
+        }
+        h3 {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+            font-size: 12px;
+        }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 8px 15px;
+            background-color: #4FC3F7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 10;
+        }
+        .back-button:hover {
+            background-color: #0288D1;
+        }
+        .touch-controls {
+            display: flex;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 10px;
+            justify-content: space-between;
+        }
+        .touch-btn {
+            padding: 15px 0;
+            font-size: 18px;
+            background-color: rgba(76, 175, 80, 0.8);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            touch-action: manipulation;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .touch-btn:active {
+            background-color: rgba(69, 160, 73, 0.9);
+            transform: scale(0.98);
+        }
+        .direction-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 5px;
+            width: 150px;
+        }
+        .action-pad {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 5px;
+            width: 120px;
+        }
+        /* 移除了up-btn样式 */
+        .left-btn {
+            grid-column: 1;
+            grid-row: 2;
+        }
+        .right-btn {
+            grid-column: 3;
+            grid-row: 2;
+        }
+        .down-btn {
+            grid-column: 2;
+            grid-row: 3;
+        }
+        .rotate-btn {
+            grid-column: 1;
+            grid-row: 1;
+        }
+        .drop-btn {
+            grid-column: 2;
+            grid-row: 1;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='index.html'">返回选择</button>
+    <h1>俄罗斯方块 - 手机版</h1>
+    <div class="game-container">
+        <canvas id="gameBoard" class="game-board" width="240" height="480"></canvas>
+        <div class="info-panel">
+            <div class="next-piece">
+                <h3>下一个方块</h3>
+                <canvas id="nextPiece" width="80" height="80"></canvas>
+            </div>
+            <div class="score-board">
+                <div class="score-item">
+                    <h3>分数:</h3>
+                    <p id="score">0</p>
+                </div>
+                <div class="score-item">
+                    <h3>等级:</h3>
+                    <p id="level">1</p>
+                </div>
+                <div class="score-item">
+                    <h3>行数:</h3>
+                    <p id="lines">0</p>
+                </div>
+            </div>
+            <div class="game-buttons">
+                <button id="startBtn">开始游戏</button>
+                <button id="pauseBtn">暂停</button>
+            </div>
+        </div>
+        <div class="touch-controls">
+            <div class="direction-pad">
+                <button class="touch-btn left-btn" id="leftBtn">←</button>
+                <button class="touch-btn right-btn" id="rightBtn">→</button>
+                <button class="touch-btn down-btn" id="downBtn">↓</button>
+            </div>
+            <div class="action-pad">
+                <button class="touch-btn rotate-btn" id="rotateBtn">↻</button>
+            </div>
+        </div>
+    </div>
+    <div class="footer">Power by Nick Lee</div>
+    <script src="mobile-game.js"></script>
+</body>
+</html>

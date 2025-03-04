@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>俄罗斯方块 - 电脑版</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .game-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .game-board {
+            border: 2px solid #333;
+            background-color: #fff;
+        }
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .next-piece {
+            border: 2px solid #333;
+            background-color: #fff;
+            padding: 10px;
+        }
+        .score-board {
+            border: 2px solid #333;
+            background-color: #fff;
+            padding: 10px;
+        }
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 8px 15px;
+            background-color: #4FC3F7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .back-button:hover {
+            background-color: #0288D1;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='index.html'">返回选择</button>
+    <h1>俄罗斯方块 - 电脑版</h1>
+    <div class="game-container">
+        <canvas id="gameBoard" class="game-board" width="300" height="600"></canvas>
+        <div class="side-panel">
+            <div class="next-piece">
+                <h3>下一个方块</h3>
+                <canvas id="nextPiece" width="100" height="100"></canvas>
+            </div>
+            <div class="score-board">
+                <h3>分数</h3>
+                <p id="score">0</p>
+                <h3>等级</h3>
+                <p id="level">1</p>
+                <h3>消除行数</h3>
+                <p id="lines">0</p>
+            </div>
+        </div>
+    </div>
+    <div class="controls">
+        <button id="startBtn">开始游戏</button>
+        <button id="pauseBtn">暂停</button>
+    </div>
+    <div class="footer">Power by Nick Lee</div>
+    <script src="game.js"></script>
+</body>
+</html>
