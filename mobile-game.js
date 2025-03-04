@@ -57,41 +57,30 @@ class Tetris {
     }
 
     bindControls() {
-        // 触摸控制
-        document.getElementById('leftBtn').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (!this.gameOver && !this.paused) {
-                this.movePiece(-1, 0);
-            }
-        });
+        // 触摸控制 - 同时添加touchstart和click事件以兼容不同设备
+        const addControlEvent = (id, callback) => {
+            const element = document.getElementById(id);
+            // 触摸事件
+            element.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (!this.gameOver && !this.paused) {
+                    callback();
+                }
+            });
+            // 点击事件作为备选
+            element.addEventListener('click', (e) => {
+                if (!this.gameOver && !this.paused) {
+                    callback();
+                }
+            });
+        };
 
-        document.getElementById('rightBtn').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (!this.gameOver && !this.paused) {
-                this.movePiece(1, 0);
-            }
-        });
-
-        document.getElementById('downBtn').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (!this.gameOver && !this.paused) {
-                this.movePiece(0, 1);
-            }
-        });
-
-        document.getElementById('rotateBtn').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (!this.gameOver && !this.paused) {
-                this.rotatePiece();
-            }
-        });
-
-        document.getElementById('dropBtn').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (!this.gameOver && !this.paused) {
-                this.hardDrop();
-            }
-        });
+        // 绑定方向控制
+        addControlEvent('leftBtn', () => this.movePiece(-1, 0));
+        addControlEvent('rightBtn', () => this.movePiece(1, 0));
+        addControlEvent('downBtn', () => this.movePiece(0, 1));
+        addControlEvent('rotateBtn', () => this.rotatePiece());
+        addControlEvent('dropBtn', () => this.hardDrop());
 
         // 防止触摸滑动时页面滚动
         const touchButtons = document.querySelectorAll('.touch-btn');
@@ -325,7 +314,9 @@ class Tetris {
             this.draw();
         }
 
-        requestAnimationFrame(this.animate.bind(this));
+        if (!this.gameOver && !this.paused) {
+            requestAnimationFrame(this.animate.bind(this));
+        }
     }
 }
 
